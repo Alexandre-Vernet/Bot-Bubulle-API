@@ -1,0 +1,12 @@
+version: '3'
+services:
+    bot-bubulle-api:
+        image: bot-bubulle:api
+        restart: always
+        environment:
+            - FIREBASE_PROJECT_ID=
+            - FIREBASE_PRIVATE_KEY=
+            - FIREBASE_CLIENT_EMAIL=
+        ports:
+            - "4006:80"
+            - "4007:443"
