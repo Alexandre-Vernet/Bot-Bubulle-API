@@ -1,4 +1,5 @@
 import schedule from "node-schedule";
+import { Job } from 'node-schedule';
 import sendNotification from "./notification";
 import { getFirestore } from "firebase-admin/firestore";
 import admin from "firebase-admin";
@@ -24,15 +25,31 @@ const cron = () => {
 
     const db = getFirestore();
 
+    const scheduledJobs: { [taskId: string]: Job } = {};
+
     db.collection('notifications')
         .onSnapshot(querySnapshot => {
-            querySnapshot.docChanges().forEach((change) => {
-                const {token, job} = change.doc.data();
-                schedule.scheduleJob(job, () => {
+        querySnapshot.docChanges().forEach((change) => {
+            const id = change.doc.id;
+            const { token, cron } = change.doc.data();
+
+            if (change.type === "added" || change.type === "modified") {
+                if (scheduledJobs[id]) {
+                    scheduledJobs[id].cancel();
+                }
+
+                scheduledJobs[id] = schedule.scheduleJob(cron, () => {
                     sendNotification(token);
+                    console.log('Notification sent to', token);
                 });
-            });
+            } else if (change.type === "removed") {
+                if (scheduledJobs[id]) {
+                    scheduledJobs[id].cancel();
+                    delete scheduledJobs[id];
+                }
+            }
         });
+    });
 }
 
 export default cron;
