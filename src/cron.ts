@@ -40,7 +40,6 @@ const cron = () => {
 
                 scheduledJobs[id] = schedule.scheduleJob(cron, () => {
                     sendNotification(token);
-                    console.log('Notification sent to', token);
                 });
             } else if (change.type === "removed") {
                 if (scheduledJobs[id]) {
