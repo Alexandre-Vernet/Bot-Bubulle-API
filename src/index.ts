@@ -1,10 +1,13 @@
-const packageJSON = require('./package.json');
-const express = require('express');
+import packageJSON from "../package.json";
+
+import express from "express";
+
+import cron from "./cron";
+import dotenv from "dotenv";
 const app = express();
 const port = process.env.PORT || 80;
-require('dotenv').config();
-const cron = require('./functions/cron');
 
+dotenv.config();
 app.use(express.json());
 
 cron();

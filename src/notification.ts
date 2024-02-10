@@ -1,6 +1,6 @@
-const admin = require("firebase-admin");
+import admin from "firebase-admin";
 
-const sendNotification = (token) => {
+const sendNotification = (token: string) => {
     const message = { token };
 
     admin.messaging().send(message)
@@ -9,4 +9,4 @@ const sendNotification = (token) => {
         });
 }
 
-module.exports = sendNotification;
+export default sendNotification;

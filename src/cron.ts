@@ -1,7 +1,7 @@
-const schedule = require("node-schedule");
-const sendNotification = require("./notification");
-const {getFirestore} = require("firebase-admin/firestore");
-const admin = require("firebase-admin");
+import schedule from "node-schedule";
+import sendNotification from "./notification";
+import { getFirestore } from "firebase-admin/firestore";
+import admin from "firebase-admin";
 
 const cron = () => {
     const serviceAccount = {
@@ -19,7 +19,7 @@ const cron = () => {
     }
 
     admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
+        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount)
     });
 
     const db = getFirestore();
@@ -35,4 +35,4 @@ const cron = () => {
         });
 }
 
-module.exports = cron;
+export default cron;
